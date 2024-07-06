@@ -1,0 +1,33 @@
+---
+- name: Configure kubectl for DigitalOcean Kubernetes Cluster
+  hosts: localhost
+  become: yes
+  vars:
+    do_token: "dop_v1_8a801c9d0fa5a2d3be57ffd1ad094d989c7b5c530b847bac4ebf4292f7ab3c9c"
+    cluster_name: "k8s-1-30-1-do-0-blr1-1719653206867"
+
+  tasks:
+    - name: Initialize doctl authentication (if not already authenticated)
+      command: doctl auth init --access-token {{ do_token }}
+      args:
+        creates: ~/.config/doctl/config.yaml  # Check if already authenticated
+      environment:
+        HOME: "{{ ansible_env.HOME }}"
+      register: auth_result
+      changed_when: auth_result.rc != 0
+
+    - name: Set kubectl context for DigitalOcean cluster
+      command: doctl kubernetes cluster kubeconfig save {{ cluster_name }}
+      environment:
+        DOCTL_API_TOKEN: "{{ do_token }}"
+      when: not auth_result.changed
+      become: yes
+
+    - name: Verify kubectl configuration
+      command: kubectl get nodes
+      register: kubectl_output
+      become: yes
+
+    - name: Display worker nodes
+      debug:
+        var: kubectl_output.content
