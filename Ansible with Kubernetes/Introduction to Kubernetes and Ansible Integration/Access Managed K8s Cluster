@@ -3,7 +3,7 @@
   hosts: webservers
   become: yes
   vars:
-    do_token: "dop_v1_55ec358e3acda6fae441c88f87ca16ff15235ff130aa16f34d6257304bb4f3f4"
+    do_token: "TOKEN"
     cluster_name: "k8s-ansible-cluster"
 
   tasks:
