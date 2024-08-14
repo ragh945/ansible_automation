@@ -1,6 +1,6 @@
 ---
 - name: Configure kubectl for DigitalOcean Kubernetes Cluster
-  hosts: localhost
+  hosts: webservers
   become: yes
 
   tasks:

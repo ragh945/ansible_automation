@@ -1,6 +1,6 @@
 ---
 - name: Install doctl on Unix system
-  hosts: localhost  # Replace with your target host or group of hosts
+  hosts: webservers  # Replace with your target host or group of hosts
   become: yes  # This allows Ansible to escalate privileges if necessary
 
   tasks:
